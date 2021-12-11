@@ -4,7 +4,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(INSTALL_TESTS "Install the tests on make install" OFF)
 
-if(IOS)
+if(IOS OR ANDROID)
   set(QT_STATICPLUGIN ON CACHE BOOL "Build static plugins" FORCE)
 endif()
 
@@ -125,15 +125,11 @@ else()
 endif()
 
 if(ANDROID)
-  configure_file(
-    ${CMAKE_SOURCE_DIR}/android/AndroidManifest.xml.in
-    ${CMAKE_SOURCE_DIR}/android/package-sources/AndroidManifest.xml
-  )
-  include(android/AddQtAndroidApk.cmake)
   add_dependencies(noson-gui NosonApp NosonApp-qmldir
       NosonThumbnailer NosonThumbnailer-qmldir
       NosonMediaScanner NosonMediaScanner-qmldir
   )
+  include(android/AddQtAndroidApk.cmake)
   add_qt_android_apk(noson-apk noson-gui
       NAME ${APP_NAME}
       VERSION_CODE ${APP_VERSION_CODE}
