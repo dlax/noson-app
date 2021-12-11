@@ -109,6 +109,10 @@ if(MSVC)
   configure_msvc_runtime()
 endif()
 
+set(QT_MIN_VERSION 5.15.2)
+# Workaround for QTBUG-87863 before calling add_subirectory
+find_package(Qt5 ${QT_MIN_VERSION} COMPONENTS Core REQUIRED)
+
 add_subdirectory(backend)
 add_subdirectory(gui)
 

@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.8.2)
 # Automatically create moc files
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5Core REQUIRED)
+set(QT_MIN_VERSION 5.15.2)
+find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Qml REQUIRED)
 find_package(Qt5Quick REQUIRED)
