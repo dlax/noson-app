@@ -1,12 +1,12 @@
-name: build android ndk18
+name: build android ndk21
 
 on:
   pull_request:
     branches:
-      - master
+      - qt5.15
   push:
     branches:
-      - master
+      - qt5.15
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
       - name: Run sdkmanager update
         run:  ${ANDROID_HOME}/tools/bin/sdkmanager --update
       - name: Install android platform, tools, ndk
-        run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "platform-tools" "platforms;android-24" "build-tools;29.0.2" "ndk;18.1.5063045"
+        run:  ${ANDROID_HOME}/tools/bin/sdkmanager --install "platform-tools" "platforms;android-24" "build-tools;29.0.2" "ndk;21.4.7075529"
       - name: Dump Android NDK
         run: "ls ${ANDROID_HOME}/ndk"
       - name: Cache Qt
@@ -35,10 +35,9 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: '5.12.9'
+          version: '5.15.2'
           host: 'linux'
           target: 'android'
-          arch: 'android_arm64_v8a'
           modules: android
           install-deps: 'true'
           cached: ${{ steps.cache-qt.outputs.cache-hit }}
@@ -47,23 +46,23 @@ jobs:
       - name: Init submodules
         run: git submodule init && git submodule update
       - name: Configure manifest
-        run: cp android/AndroidManifest.xml.in.ndk18 android/AndroidManifest.xml.in
+        run: cp android/AndroidManifest.xml.in.ndk21 android/AndroidManifest.xml.in
       - name: Configure build
         run: "cmake -B build
                     -DCMAKE_SYSTEM_NAME=Android
                     -DCMAKE_PREFIX_PATH=${Qt5_DIR}
-                    -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk/18.1.5063045/build/cmake/android.toolchain.cmake
-                    -DCMAKE_MAKE_PROGRAM=${ANDROID_HOME}/ndk/18.1.5063045/prebuilt/linux-x86_64/bin/make
+                    -DCMAKE_TOOLCHAIN_FILE=${ANDROID_HOME}/ndk/21.4.7075529/build/cmake/android.toolchain.cmake
+                    -DCMAKE_MAKE_PROGRAM=${ANDROID_HOME}/ndk/21.4.7075529/prebuilt/linux-x86_64/bin/make
                     -DANDROID_ABI=arm64-v8a
                     -DANDROID_STL_PREFIX=llvm-libc++
                     -DANDROID_STL_SHARED_LIBRARIES=c++_shared
                     -DANDROID_SDK_MINVER=24
                     -DANDROID_SDK_TARGET=26
-                    -DANDROID_NATIVE_API_LEVEL=16
-                    -DQT_ANDROID_PLATFORM_LEVEL=16
+                    -DANDROID_NATIVE_API_LEVEL=24
+                    -DQT_ANDROID_PLATFORM_LEVEL=24
                     -DQT_ANDROID_TOOL_PREFIX=aarch64-linux-android
                     -DQT_ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT}
-                    -DQT_ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/18.1.5063045
+                    -DQT_ANDROID_NDK_ROOT=${ANDROID_HOME}/ndk/21.4.7075529
                     -DQT_ANDROID_QT_ROOT=${Qt5_DIR}
                     -DQT_ANDROID_SDK_BUILDTOOLS_REVISION=21.0.0
                     -DQt5_DIR=${Qt5_DIR}/lib/cmake/Qt5
