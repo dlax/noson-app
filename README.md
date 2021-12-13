@@ -13,7 +13,7 @@ Go to [project page](http://janbar.github.io/noson-app/index.html) for further d
 
 ## Build instructions
 
-The build can be achieved on any platform supporting Qt version 5.9. See `debian/control` file for more details about dependencies.
+The build can be achieved on any platform supporting Qt version 5.15. See `debian/control` file for more details about dependencies.
 
 ### Linux/BSD
 
@@ -23,39 +23,17 @@ Running Noson in "freedesktop" allows the following extra features.
 
 #### Install the dependencies
 
-###### For Ubuntu(16) / Debian(10) (**qtbase5 >= 5.9**)
+###### For Ubuntu / Debian
+
+Requires Qt5 development framework version >= 5.15.2.
 
 ```bash
-$ apt-get install qtbase5-dev qttools5-dev qttools5-dev-tools qtdeclarative5-dev \
-qtdeclarative5-dev-tools qtquickcontrols2-5-dev libqt5svg5-dev libqt5svg5 \
-qml-module-qt-labs-settings qml-module-qtgraphicaleffects \
-qml-module-qtqml-models2 qml-module-qtquick2 qml-module-qtquick-controls2 \
-qml-module-qtquick-layouts qml-module-qtquick-particles2 \
-qml-module-qtquick-templates2 qml-module-qtquick-window2 \
-zlib1g-dev libssl-dev libflac-dev libflac++-dev libpulse-dev \
-libdbus-1-dev libqt5dbus5
+$ apt-get install zlib1g-dev libssl-dev libflac-dev libflac++-dev libpulse-dev \
+libdbus-1-dev
 ```
   - Build tools: `build-essential` `git` `cmake` `g++ >= 4.8.5 | clang >= 3.4`
 
-###### For Centos(7) / Fedora(26) (**qt5-qtbase >= 5.9**)
-
-```bash
-$ yum install qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel \
-qt5-qtquickcontrols2-devel qt5-qtgraphicaleffects qt5-qtsvg-devel \
-qt5-qtsvg zlib-devel openssl-devel flac-devel pulseaudio-libs-devel \
-dbus-devel
-```
-  - Build tools: `git` `cmake >= 3.8.2` `gcc-c++ >= 4.8.5 | clang >= 3.4`
-
-  - As needed you have to install **cmake >= 3.8.2**
-
-    ```bash
-    $ wget https://github.com/Kitware/CMake/releases/download/v3.14.7/cmake-3.14.7-Linux-x86_64.tar.gz
-    $ tar xvfz cmake-3.14.7-Linux-x86_64.tar.gz
-    $ export PATH=$(pwd)/cmake-3.14.7-Linux-x86_64/bin:$PATH
-    ```
-
-###### For FreeBSD 12.0
+###### For FreeBSD 13.0
 
 ```bash
 $ pkg install cmake git bash dbus flac pulseaudio \
@@ -76,8 +54,8 @@ $ sudo make install
   - To uninstall the application type `sudo make uninstall`
 
 ### Others supported platforms (without extra features*)
-- MacOSX (XCode >= 9.0)
-- Android (SDK 21.0, Android >= 16 Lollipop)
+- MacOSX (XCode >= 10.0)
+- Android (SDK 23.0, Android >= Marshmallow)
 - Windows (MSVC 2017)
 
 <small>(\*) PulseAudio is available only with freedesktop (Linux/BSD). So on those platforms you can only stream your local music library.</small>
