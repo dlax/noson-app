@@ -35,7 +35,7 @@ public:
    * destructor.
    * @param lock The pointer to lockable object
    */
-  LockGuard(QMutex * lock)
+  LockGuard(QRecursiveMutex * lock)
   : m_lock(lock)
   {
     if (m_lock)
@@ -61,7 +61,7 @@ public:
   }
 
 private:
-  QMutex * m_lock;
+  QRecursiveMutex * m_lock;
 };
 
 template<typename T>
@@ -70,7 +70,7 @@ class Locked
 public:
   Locked(const T& val)
   : m_val(val)
-  , m_lock(new QMutex()) {}
+  , m_lock(new QRecursiveMutex()) {}
 
   ~Locked()
   {
@@ -93,7 +93,7 @@ public:
   class pointer
   {
   public:
-    pointer(T& val, QMutex*& lock) : m_val(val), m_g(lock) {}
+    pointer(T& val, QRecursiveMutex*& lock) : m_val(val), m_g(lock) {}
     T& operator* () const { return m_val; }
     T *operator->() const { return &m_val; }
   private:
@@ -108,7 +108,7 @@ public:
 
 protected:
   T m_val;
-  QMutex * m_lock;
+  QRecursiveMutex * m_lock;
 
   // Prevent copy
   Locked(const Locked<T>& other);

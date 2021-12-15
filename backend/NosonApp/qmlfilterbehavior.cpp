@@ -24,7 +24,7 @@ using namespace nosonapp;
 FilterBehavior::FilterBehavior(QObject *parent)
     : QObject(parent)
     , m_property(QString())
-    , m_pattern(QRegExp())
+    , m_pattern(QRegularExpression())
 {
 
 }
@@ -42,14 +42,14 @@ FilterBehavior::setProperty(const QString& property)
     Q_EMIT propertyChanged();
 }
 
-QRegExp
+QRegularExpression
 FilterBehavior::pattern() const
 {
     return m_pattern;
 }
 
 void
-FilterBehavior::setPattern(QRegExp pattern)
+FilterBehavior::setPattern(QRegularExpression pattern)
 {
     m_pattern = pattern;
     Q_EMIT patternChanged();

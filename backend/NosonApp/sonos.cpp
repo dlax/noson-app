@@ -45,7 +45,7 @@ Sonos::Sonos(QObject* parent)
 , m_savedQueuesUpdateID(0)
 , m_system(this, systemEventCB)
 , m_workerPool()
-, m_jobCount(LockedNumber<int>(0))
+, m_jobCount(0)
 , m_locale("en_US")
 {
   SONOS::System::Debug(2);
@@ -66,7 +66,7 @@ Sonos::Sonos(QObject* parent)
 Sonos::~Sonos()
 {
   {
-    Locked<ManagedContents>::pointer left = m_library.Get();
+    auto left = m_library.Get();
     for (ManagedContents::iterator it = left->begin(); it != left->end(); ++it)
     {
       LockGuard g(it->model->m_lock);
@@ -424,7 +424,7 @@ void Sonos::runContentLoader(ListModel<Sonos>* model)
 
 void Sonos::loadContent(ListModel<Sonos>* model)
 {
-  Locked<ManagedContents>::pointer mc = m_library.Get();
+  auto mc = m_library.Get();
   for (ManagedContents::iterator it = mc->begin(); it != mc->end(); ++it)
     if (it->model == model)
     {
@@ -441,7 +441,7 @@ void Sonos::loadAllContent()
 {
   QList<ListModel<Sonos>*> left;
   {
-    Locked<ManagedContents>::pointer mc = m_library.Get();
+    auto mc = m_library.Get();
     for (ManagedContents::iterator it = mc->begin(); it != mc->end(); ++it)
       if (it->model->m_dataState == DataStatus::DataNotFound)
         left.push_back(it->model);
@@ -500,7 +500,7 @@ void Sonos::registerContent(ListModel<Sonos>* model, const QString& root)
   if (model)
   {
     qDebug("%s: %p (%s)", __FUNCTION__, model, root.toUtf8().constData());
-    Locked<ManagedContents>::pointer mc = m_library.Get();
+    auto mc = m_library.Get();
     for (ManagedContents::iterator it = mc->begin(); it != mc->end(); ++it)
     {
       if (it->model == model)
@@ -518,7 +518,7 @@ void Sonos::unregisterContent(ListModel<Sonos>* model)
   if (model)
   {
     QList<ManagedContents::iterator> left;
-    Locked<ManagedContents>::pointer mc = m_library.Get();
+    auto mc = m_library.Get();
     for (ManagedContents::iterator it = mc->begin(); it != mc->end(); ++it)
       if (it->model == model)
         left.push_back(it);
@@ -561,7 +561,7 @@ void Sonos::systemEventCB(void *handle)
     emit sonos->alarmClockChanged();
   if ((events & SONOS::SVCEvent_ContentDirectoryChanged))
   {
-    Locked<ManagedContents>::pointer cl = sonos->m_library.Get();
+    auto cl = sonos->m_library.Get();
     SONOS::ContentProperty prop = sonos->getSystem().GetContentProperty();
     for (std::vector<std::pair<std::string, unsigned> >::const_iterator uit = prop.ContainerUpdateIDs.begin(); uit != prop.ContainerUpdateIDs.end(); ++uit)
     {

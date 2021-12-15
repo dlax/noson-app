@@ -35,23 +35,23 @@ public:
    * destructor.
    * @param lock The pointer to lockable object
    */
-  LockGuard(QMutex * lock)
+  LockGuard(QRecursiveMutex * lock)
   : m_lock(lock)
   {
     if (m_lock)
       m_lock->lock();
   }
-  
+
   ~LockGuard()
   {
     if (m_lock)
       m_lock->unlock();
   }
-  
+
   LockGuard(const LockGuard& other)
   : m_lock(other.m_lock)
   { }
-  
+
   LockGuard& operator=(const LockGuard& other)
   {
     if (m_lock)
@@ -59,9 +59,9 @@ public:
     m_lock = other.m_lock;
     return *this;
   }
-  
+
 private:
-  QMutex * m_lock;
+  QRecursiveMutex * m_lock;
 };
 
 template<typename T>
@@ -70,46 +70,46 @@ class Locked
 public:
   Locked(const T& val)
   : m_val(val)
-  , m_lock(new QMutex(QMutex::Recursive)) {}
-  
+  , m_lock(new QRecursiveMutex()) {}
+
   ~Locked()
   {
     delete m_lock;
   }
-  
+
   T Load()
   {
     LockGuard g(m_lock);
     return m_val; // return copy
   }
-  
+
   const T& Store(const T& newval)
   {
     LockGuard g(m_lock);
     m_val = newval;
     return newval; // return input
   }
-  
+
   class pointer
   {
   public:
-    pointer(T& val, QMutex*& lock) : m_val(val), m_g(lock) {}
+    pointer(T& val, QRecursiveMutex*& lock) : m_val(val), m_g(lock) {}
     T& operator* () const { return m_val; }
     T *operator->() const { return &m_val; }
   private:
     T& m_val;
     LockGuard m_g;
   };
-  
+
   pointer Get()
   {
     return pointer(m_val, m_lock);
   }
-  
+
 protected:
   T m_val;
-  QMutex * m_lock;
-  
+  QRecursiveMutex * m_lock;
+
   // Prevent copy
   Locked(const Locked<T>& other);
   Locked<T>& operator=(const Locked<T>& other);
@@ -121,24 +121,24 @@ class LockedNumber : public Locked<T>
 public:
   LockedNumber(T val)
   : Locked<T>(val) {}
-  
+
   T Add(T amount)
   {
     LockGuard g(Locked<T>::m_lock);
     return Locked<T>::m_val += amount;
   }
-  
+
   T operator+=(T amount)
   {
     return Add(amount);
   }
-  
+
   T Sub(T amount)
   {
     LockGuard g(Locked<T>::m_lock);
     return Locked<T>::m_val -= amount;
   }
-  
+
   T operator-=(T amount)
   {
     return Sub(amount);

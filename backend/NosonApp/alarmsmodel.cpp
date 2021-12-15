@@ -33,7 +33,7 @@ AlarmItem::AlarmItem(const SONOS::AlarmPtr& ptr)
 QVariant AlarmItem::payload() const
 {
   QVariant var;
-  var.setValue<SONOS::AlarmPtr>(m_ptr);
+  var.setValue<SONOS::AlarmPtr>(SONOS::AlarmPtr(m_ptr));
   return var;
 }
 
@@ -184,17 +184,13 @@ void AlarmsModel::addItem(AlarmItem* item)
 int AlarmsModel::rowCount(const QModelIndex& parent) const
 {
   Q_UNUSED(parent);
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   return m_items.count();
 }
 
 QVariant AlarmsModel::data(const QModelIndex& index, int role) const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (index.row() < 0 || index.row() >= m_items.count())
       return QVariant();
 

@@ -54,17 +54,13 @@ void AllServicesModel::addItem(ServiceItem* item)
 int AllServicesModel::rowCount(const QModelIndex& parent) const
 {
   Q_UNUSED(parent);
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   return m_items.count();
 }
 
 QVariant AllServicesModel::data(const QModelIndex& index, int role) const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (index.row() < 0 || index.row() >= m_items.count())
       return QVariant();
 

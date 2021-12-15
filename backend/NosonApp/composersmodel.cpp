@@ -42,7 +42,7 @@ ComposerItem::ComposerItem(const SONOS::DigitalItemPtr& ptr, const QString& base
 QVariant ComposerItem::payload() const
 {
   QVariant var;
-  var.setValue<SONOS::DigitalItemPtr>(m_ptr);
+  var.setValue<SONOS::DigitalItemPtr>(SONOS::DigitalItemPtr(m_ptr));
   return var;
 }
 
@@ -73,17 +73,13 @@ void ComposersModel::addItem(ComposerItem* item)
 int ComposersModel::rowCount(const QModelIndex& parent) const
 {
   Q_UNUSED(parent);
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   return m_items.count();
 }
 
 QVariant ComposersModel::data(const QModelIndex& index, int role) const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (index.row() < 0 || index.row() >= m_items.count())
       return QVariant();
 

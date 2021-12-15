@@ -50,7 +50,7 @@ Player::Player(QObject *parent)
 Player::~Player()
 {
   {
-    Locked<ManagedQueue>::pointer queue = m_queue.Get();
+    auto queue = m_queue.Get();
     if (queue->model)
     {
       LockGuard g(queue->model->m_lock);
@@ -1225,7 +1225,7 @@ void Player::registerContent(ListModel<Player>* model, const QString& root)
   if (model)
   {
     qDebug("%s: %p (%s)", __FUNCTION__, model, model->m_root.toUtf8().constData());
-    Locked<ManagedQueue>::pointer rc = m_queue.Get();
+    auto rc = m_queue.Get();
     if (rc->model == model)
     {
       rc->root = root;
@@ -1243,7 +1243,7 @@ void Player::unregisterContent(ListModel<Player>* model)
   if (model)
   {
     qDebug("%s: %p (%s)", __FUNCTION__, model, model->m_root.toUtf8().constData());
-    Locked<ManagedQueue>::pointer rc = m_queue.Get();
+    auto rc = m_queue.Get();
     if (rc->model == model)
     {
       rc->model->m_provider = nullptr;
@@ -1521,7 +1521,7 @@ void Player::playerEventCB(void* handle)
         player->m_shareIndexInProgress = prop.ShareIndexInProgress;
       }
 
-      Locked<ManagedQueue>::pointer cl = player->m_queue.Get();
+      auto cl = player->m_queue.Get();
       // find the base of the model from its root
       if (cl->model)
       {

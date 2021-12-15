@@ -100,7 +100,7 @@ MediaItem::MediaItem(const SONOS::SMAPIItem& data)
 QVariant MediaItem::payload() const
 {
   QVariant var;
-  var.setValue<SONOS::DigitalItemPtr>(m_ptr);
+  var.setValue<SONOS::DigitalItemPtr>(SONOS::DigitalItemPtr(m_ptr));
   return var;
 }
 
@@ -136,17 +136,13 @@ void MediaModel::addItem(MediaItem* item)
 int MediaModel::rowCount(const QModelIndex& parent) const
 {
   Q_UNUSED(parent);
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   return m_items.count();
 }
 
 QVariant MediaModel::data(const QModelIndex& index, int role) const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (index.row() < 0 || index.row() >= m_items.count())
       return QVariant();
 
@@ -313,9 +309,7 @@ bool MediaModel::loadData()
 
 QString MediaModel::pathName() const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (m_path.empty())
     return ROOT_TAG;
   else
@@ -324,9 +318,7 @@ QString MediaModel::pathName() const
 
 QString MediaModel::pathId() const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (m_path.empty())
     return ROOT_TAG;
   else
@@ -335,9 +327,7 @@ QString MediaModel::pathId() const
 
 int MediaModel::parentDisplayType() const
 {
-#ifdef USE_RECURSIVE_MUTEX
   LockGuard g(m_lock);
-#endif
   if (m_path.empty())
     return ROOT_DISPLAY_TYPE;
   else

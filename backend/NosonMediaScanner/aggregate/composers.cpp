@@ -32,7 +32,7 @@ ComposerModel::ComposerModel(const MediaFilePtr& file)
 QVariant ComposerModel::payload() const
 {
   QVariant var;
-  var.setValue<MediaFilePtr>(m_file);
+  var.setValue<MediaFilePtr>(MediaFilePtr(m_file));
   return var;
 }
 
@@ -96,7 +96,7 @@ QVariant Composers::data(const QModelIndex& index, int role) const
   case PayloadRole:
   {
     QVariant var;
-    var.setValue<ItemPtr>(item);
+    var.setValue<ItemPtr>(ItemPtr(item));
     return var;
   }
   case IdRole:
@@ -143,7 +143,7 @@ QVariantMap Composers::get(int row)
   QVariantMap model;
   QHash<int, QByteArray> roles = roleNames();
   QVariant var;
-  var.setValue<ItemPtr>(item);
+  var.setValue<ItemPtr>(ItemPtr(item));
   model[roles[PayloadRole]] = var;
   model[roles[IdRole]] = item->model.key();
   model[roles[ComposerRole]] = item->model.composer();

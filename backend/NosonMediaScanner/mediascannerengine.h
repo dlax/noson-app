@@ -84,7 +84,7 @@ private:
   NodeMap m_nodes;
   NodeMap m_items;
   FileMap m_files;
-  QMutex * m_fileItemsLock;
+  QRecursiveMutex * m_fileItemsLock;
   QFileSystemWatcher m_watcher;
   QList<MediaParserPtr> m_parsers;
   QThreadPool m_workerPool;
