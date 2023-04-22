@@ -1,4 +1,10 @@
-noson-app (5.3) UNRELEASED; urgency=low
+noson-app (5.4.0~bpo11+1) bullseye-backports; urgency=medium
+
+  * Rebuild for bullseye-backports.
+
+ -- Denis Laxalde <denis@laxalde.org>  Sat, 22 Apr 2023 19:19:18 +0200
+
+noson-app (5.4.0) unstable; urgency=low
 
   [ janbar ]
   * Release 5.1.0
