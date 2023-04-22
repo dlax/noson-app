@@ -1,4 +1,11 @@
-noson-app (5.3) UNRELEASED; urgency=low
+noson-app (5.4.0~bpo12+1) bookworm-backports; urgency=medium
+
+  * Rebuild for bookworm-backports.
+  * Update libflac dependencies.
+
+ -- Denis Laxalde <denis@laxalde.org>  Sat, 22 Apr 2023 19:19:18 +0200
+
+noson-app (5.4.0) unstable; urgency=low
 
   [ janbar ]
   * Release 5.1.0
